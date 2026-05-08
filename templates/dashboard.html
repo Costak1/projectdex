@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cyber Watch Suite</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme='light']{--bg:#f7f6f2;--surface:#f9f8f5;--surface2:#fbfbf9;--offset:#f3f0ec;--border:#d4d1ca;--divider:#dcd9d5;--text:#28251d;--muted:#66645e;--faint:#999690;--primary:#01696f;--primary-hover:#0c4e54;--success:#437a22;--warning:#964219;--error:#a12c7b;--blue:#006494;--orange:#da7101}
+    [data-theme='dark']{--bg:#171614;--surface:#1c1b19;--surface2:#201f1d;--offset:#252320;--border:#393836;--divider:#262523;--text:#e7e5e1;--muted:#b0ada7;--faint:#7b7873;--primary:#4f98a3;--primary-hover:#67aab4;--success:#6daa45;--warning:#e19b4c;--error:#d163a7;--blue:#73a8d8;--orange:#fdab43}
+    *{box-sizing:border-box} html,body{margin:0;height:100%} body{font-family:'Satoshi',sans-serif;background:var(--bg);color:var(--text)} button,input{font:inherit} a{color:inherit}
+    .app{display:grid;grid-template-columns:300px 1fr;grid-template-rows:72px 1fr;height:100dvh}.sidebar{grid-row:1/-1;padding:1.25rem;border-right:1px solid var(--border);overflow:auto;background:linear-gradient(180deg,var(--surface),var(--surface2))}.header{grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface)}.main{grid-column:2;overflow:auto;padding:1.25rem;display:grid;gap:1rem;align-content:start}
+    .card,.watchbox{background:linear-gradient(180deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:1rem}.card{padding:1rem}.watchbox{padding:1rem;margin-top:1rem}.brand{display:flex;align-items:center;justify-content:space-between;gap:1rem}.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}.kpi .label{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.kpi .value{font-size:2rem;font-weight:700}.tiny{font-size:.85rem;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem}.stack{display:grid;gap:1rem}.row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}.item{padding:1rem;border:1px solid var(--border);border-radius:.85rem;background:color-mix(in srgb,var(--surface) 86%,var(--offset))}.items{display:grid;gap:.8rem}.chip,.badge{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .6rem;border-radius:9999px;font-size:.78rem;border:1px solid transparent}.chip{background:color-mix(in srgb,var(--primary) 14%,var(--offset));border-color:color-mix(in srgb,var(--primary) 32%,var(--border))}.chip button{background:none;border:none;color:var(--muted);cursor:pointer}
+    .sev-critical{background:color-mix(in srgb,var(--error) 18%,transparent);color:#ffd5ef;border-color:color-mix(in srgb,var(--error) 40%,var(--border))}.sev-high{background:color-mix(in srgb,var(--orange) 18%,transparent);color:#ffe0bf;border-color:color-mix(in srgb,var(--orange) 40%,var(--border))}.sev-medium{background:color-mix(in srgb,var(--warning) 18%,transparent);color:#ffe3bf;border-color:color-mix(in srgb,var(--warning) 40%,var(--border))}.sev-low{background:color-mix(in srgb,var(--blue) 16%,transparent);color:#d9ecff;border-color:color-mix(in srgb,var(--blue) 40%,var(--border))}.match{background:color-mix(in srgb,var(--success) 18%,transparent);color:#dff3d4;border-color:color-mix(in srgb,var(--success) 40%,var(--border))}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.72rem 1rem;border-radius:.8rem;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer}.btn.primary{background:var(--primary);border-color:transparent;color:#111}.btn.primary:hover{background:var(--primary-hover)} .split{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}.search{display:flex;align-items:center;gap:.5rem;min-width:min(420px,48vw);padding:.72rem .9rem;border-radius:.8rem;border:1px solid var(--border);background:var(--surface)}.search input{width:100%;border:none;outline:none;background:transparent;color:var(--text)}
+    table{width:100%;border-collapse:collapse;font-size:.93rem} th,td{padding:.78rem .75rem;text-align:left;border-bottom:1px solid var(--divider);vertical-align:top} th{position:sticky;top:0;background:var(--surface);font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.tablewrap{overflow:auto;border:1px solid var(--border);border-radius:.85rem}
+    .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.form-grid{display:grid;gap:.7rem}.form-grid input,.form-grid select{min-height:44px;padding:.7rem .85rem;border-radius:.8rem;border:1px solid var(--border);background:var(--offset);color:var(--text)}
+    @media (max-width:1100px){.app{grid-template-columns:1fr;grid-template-rows:auto auto 1fr}.sidebar,.header,.main{grid-column:1}.sidebar{grid-row:auto;border-right:none;border-bottom:1px solid var(--border)}.header{flex-direction:column;align-items:stretch}.search{min-width:0;width:100%}.kpis,.grid,.admin-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div>
+          <h1 style="margin:0">Cyber Watch Suite</h1>
+          <div class="tiny">User: __USERNAME__ · Role: __ROLE__</div>
+        </div>
+        <a class="btn" href="/logout">Logout</a>
+      </div>
+      <div class="watchbox">
+        <h3 style="margin-top:0">Watchlist</h3>
+        <div class="tiny">Track the products and vendors you own.</div>
+        <form id="watchForm" class="form-grid" style="margin-top:.8rem">
+          <input id="watchInput" type="text" placeholder="Add vendor, app, or product" />
+          <button class="btn primary" type="submit">Add watch item</button>
+        </form>
+        <div id="watchlist" class="items" style="margin-top:.9rem"></div>
+      </div>
+    </aside>
+    <header class="header">
+      <div>
+        <h2 style="margin:0">Threat dashboard</h2>
+        <div class="tiny">The Hacker News RSS, NVD API, CISA KEV, and FIRST EPSS</div>
+      </div>
+      <div class="split">
+        <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Filter headlines, CVEs, vendors"></label>
+        <button class="btn" id="themeBtn">◐</button>
+        <a class="btn" href="/report/xlsx">Export XLSX</a>
+        <a class="btn" href="/report/pdf">Export PDF</a>
+        <button class="btn primary" id="refreshBtn">Refresh now</button>
+      </div>
+    </header>
+    <main class="main">
+      <section class="kpis" id="kpis"></section>
+      <section class="grid">
+        <div class="card">
+          <div class="split" style="justify-content:space-between;margin-bottom:1rem"><div><h3 style="margin:0">Morning brief</h3><div class="tiny">Scored by severity, KEV, EPSS, watchlist match, and recency</div></div><div class="tiny" id="updatedAt">Loading</div></div>
+          <div id="brief" class="items"></div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="split" style="justify-content:space-between;margin-bottom:1rem"><div><h3 style="margin:0">Security news</h3><div class="tiny">Direct RSS ingestion</div></div><div class="tiny" id="sourceHealth">Loading</div></div>
+            <div id="news" class="items"></div>
+          </div>
+          <div class="card">
+            <h3 style="margin-top:0">Watchlist hits</h3>
+            <div id="hits" class="items"></div>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <h3 style="margin-top:0">Recent vulnerabilities</h3>
+        <div class="tablewrap"><table><thead><tr><th>CVE</th><th>Severity</th><th>KEV</th><th>EPSS</th><th>Matches</th><th>Published</th><th>Summary</th></tr></thead><tbody id="vulns"></tbody></table></div>
+      </section>
+      <section class="admin-grid">
+        <div class="card">
+          <h3 style="margin-top:0">User management</h3>
+          <form id="userForm" class="form-grid">
+            <input id="newUsername" placeholder="Username" />
+            <input id="newPassword" type="password" placeholder="Password" />
+            <input id="newEmail" placeholder="Email (optional)" />
+            <select id="newRole"><option value="viewer">viewer</option><option value="admin">admin</option></select>
+            <button class="btn primary" type="submit">Create user</button>
+          </form>
+          <div id="userList" class="items" style="margin-top:1rem"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Email digest</h3>
+          <form id="digestForm" class="form-grid">
+            <input id="smtpHost" placeholder="SMTP host" />
+            <input id="smtpPort" placeholder="SMTP port" value="587" />
+            <input id="smtpUser" placeholder="SMTP username" />
+            <input id="smtpPass" type="password" placeholder="SMTP password" />
+            <input id="senderEmail" placeholder="Sender email" />
+            <input id="recipientEmail" placeholder="Recipient email" />
+            <button class="btn primary" type="submit">Save digest settings</button>
+          </form>
+          <button class="btn" id="sendDigestBtn" style="margin-top:1rem">Send test digest</button>
+          <div id="digestStatus" class="tiny" style="margin-top:.8rem"></div>
+        </div>
+      </section>
+    
+      <section class="admin-grid">
+        <div class="card">
+          <h3 style="margin-top:0">Alias matching</h3>
+          <div class="tiny">Add alternate product names for better match accuracy, for example Office 365 for Microsoft 365.</div>
+          <form id="aliasForm" class="form-grid" style="margin-top:1rem">
+            <input id="aliasCanonical" placeholder="Canonical watch item" />
+            <input id="aliasList" placeholder="Comma-separated aliases" />
+            <button class="btn primary" type="submit">Save aliases</button>
+          </form>
+          <div id="aliasStatus" class="tiny" style="margin-top:.8rem"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Password management</h3>
+          <form id="changePasswordForm" class="form-grid">
+            <input id="currentPassword" type="password" placeholder="Current password" />
+            <input id="newPasswordSelf" type="password" placeholder="New password" />
+            <button class="btn primary" type="submit">Change my password</button>
+          </form>
+          <form id="resetPasswordForm" class="form-grid" style="margin-top:1rem">
+            <input id="resetUsername" placeholder="Username to reset" />
+            <input id="resetNewPassword" type="password" placeholder="New password for user" />
+            <button class="btn" type="submit">Admin reset password</button>
+          </form>
+          <div id="passwordStatus" class="tiny" style="margin-top:.8rem"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+<script>
+const state = {search:'', data:null, role:'__ROLE__', aliases:{}};
+const els = {
+  searchInput:document.getElementById('searchInput'), refreshBtn:document.getElementById('refreshBtn'), themeBtn:document.getElementById('themeBtn'),
+  kpis:document.getElementById('kpis'), brief:document.getElementById('brief'), news:document.getElementById('news'), hits:document.getElementById('hits'), vulns:document.getElementById('vulns'), updatedAt:document.getElementById('updatedAt'), sourceHealth:document.getElementById('sourceHealth'),
+  watchForm:document.getElementById('watchForm'), watchInput:document.getElementById('watchInput'), watchlist:document.getElementById('watchlist'),
+  userForm:document.getElementById('userForm'), userList:document.getElementById('userList'), digestForm:document.getElementById('digestForm'), sendDigestBtn:document.getElementById('sendDigestBtn'), digestStatus:document.getElementById('digestStatus'), aliasForm:document.getElementById('aliasForm'), aliasStatus:document.getElementById('aliasStatus'), changePasswordForm:document.getElementById('changePasswordForm'), resetPasswordForm:document.getElementById('resetPasswordForm'), passwordStatus:document.getElementById('passwordStatus')
+};
+function esc(s=''){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function badge(sev){const cls={critical:'sev-critical',high:'sev-high',medium:'sev-medium',low:'sev-low'};return `<span class="badge ${cls[sev]||'sev-low'}">${(sev||'low').toUpperCase()}</span>`;}
+async function api(url, opts={}){const r=await fetch(url,opts); if(!r.ok) throw new Error(await r.text()); const c=r.headers.get('content-type')||''; return c.includes('application/json')?r.json():r.text();}
+async function load(){els.refreshBtn.disabled=true; const q=state.search?`?search=${encodeURIComponent(state.search)}`:''; try{state.data=await api(`/api/dashboard${q}`); render(); els.sourceHealth.textContent=`RSS ${state.data.stats.newsCount} · CVEs ${state.data.stats.vulnCount} · KEV ${state.data.stats.kevHits}`;}catch(e){console.error(e);els.sourceHealth.textContent='Refresh failed';}finally{els.refreshBtn.disabled=false;}}
+function render(){if(!state.data)return; const d=state.data; state.aliases=d.aliases||{}; els.updatedAt.textContent=`Updated ${new Date(d.updated).toLocaleString()}`; els.kpis.innerHTML=[['Watch hits',d.stats.watchHits],['Critical CVEs',d.stats.criticalCVEs],['KEV hits',d.stats.kevHits],['Fresh items',d.stats.freshItems]].map(([a,b])=>`<div class="card kpi"><div class="label">${a}</div><div class="value">${b}</div></div>`).join(''); els.brief.innerHTML=d.brief.map(item=>`<article class="item"><div class="row"><span class="badge ${item.type==='vuln'?'sev-high':'sev-low'}">${item.type==='vuln'?'Vulnerability':'News'}</span>${badge(item.severity)}${item.kev?'<span class="badge sev-critical">KEV</span>':''}${item.epss?`<span class="badge match">EPSS ${Number(item.epss).toFixed(3)}</span>`:''}${item.matchCount?`<span class="badge match">${esc(item.matches.join(', '))}</span>`:''}</div><strong>${esc(item.title)}</strong><p class="tiny">${esc((item.summary||'').slice(0,180))}${(item.summary||'').length>180?'…':''}</p><div class="tiny">Priority ${item.priority} · ${new Date(item.published).toLocaleString()} · <a href="${item.link}" target="_blank" rel="noopener noreferrer">Open ↗</a></div></article>`).join(''); els.news.innerHTML=d.news.slice(0,6).map(item=>`<article class="item"><div class="row"><span class="badge sev-low">${esc(item.source)}</span>${item.matchCount?`<span class="badge match">${esc(item.matches.join(', '))}</span>`:''}</div><strong>${esc(item.title)}</strong><p class="tiny">${esc((item.summary||'').slice(0,150))}${(item.summary||'').length>150?'…':''}</p><a class="tiny" href="${item.link}" target="_blank" rel="noopener noreferrer">Open source ↗</a></article>`).join(''); const hits=[...d.news,...d.vulns].filter(x=>x.matchCount>0).slice(0,6); els.hits.innerHTML=hits.length?hits.map(item=>`<article class="item"><div class="row"><span class="badge match">${esc(item.matches.join(', '))}</span>${item.kev?'<span class="badge sev-critical">KEV</span>':''}${item.epss?`<span class="badge match">EPSS ${Number(item.epss).toFixed(3)}</span>`:''}</div><strong>${esc(item.title)}</strong><p class="tiny">${esc((item.summary||'').slice(0,120))}</p></article>`).join(''):'<div class="item tiny">No current watchlist hits.</div>'; els.vulns.innerHTML=d.vulns.slice(0,25).map(item=>`<tr><td><a href="${item.link}" target="_blank" rel="noopener noreferrer">${esc(item.id)}</a></td><td>${badge(item.severity)}</td><td>${item.kev?'<span class="badge sev-critical">Yes</span>':'<span class="tiny">No</span>'}</td><td>${item.epss?`${Number(item.epss).toFixed(4)} (${Number(item.percentile||0).toFixed(3)})`:'—'}</td><td>${item.matchCount?item.matches.map(m=>`<span class="chip">${esc(m)}</span>`).join(' '):'<span class="tiny">None</span>'}</td><td>${new Date(item.published).toLocaleDateString()}</td><td>${esc((item.summary||'').slice(0,150))}</td></tr>`).join(''); renderWatchlist(d.watchlist); if(state.role!=='admin'){document.querySelector('.admin-grid').style.display='none';} else {loadUsers();}}
+function renderWatchlist(items){els.watchlist.innerHTML=items.map(i=>`<div class="row"><span class="chip">${esc(i)}</span><button class="btn" data-remove="${encodeURIComponent(i)}">Remove</button></div>`).join(''); els.watchlist.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',async()=>{await fetch(`/api/watchlist/${b.dataset.remove}`,{method:'DELETE'}); await load();}));}
+async function loadUsers(){const data=await api('/admin/users'); els.userList.innerHTML=data.users.map(u=>`<article class="item"><strong>${esc(u.username)}</strong><div class="tiny">role=${esc(u.role)} · email=${esc(u.email||'n/a')} · active=${u.active}</div><div class="row" style="margin-top:.6rem">${u.username!=='admin'?`<button class="btn" data-disable="${esc(u.username)}">Disable</button><button class="btn" data-delete="${esc(u.username)}">Delete</button>`:''}</div></article>`).join(''); document.querySelectorAll('[data-disable]').forEach(b=>b.addEventListener('click', async()=>{await api(`/admin/users/${encodeURIComponent(b.dataset.disable)}/disable`,{method:'POST'}); await loadUsers();})); document.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click', async()=>{await api(`/admin/users/${encodeURIComponent(b.dataset.delete)}`,{method:'DELETE'}); await loadUsers();}));}
+els.watchForm.addEventListener('submit',async e=>{e.preventDefault(); const item=els.watchInput.value.trim(); if(!item)return; await api('/api/watchlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({item})}); els.watchInput.value=''; await load();});
+els.searchInput.addEventListener('input',async e=>{state.search=e.target.value.trim(); await load();});
+els.refreshBtn.addEventListener('click',load); els.themeBtn.addEventListener('click',()=>{const r=document.documentElement;r.setAttribute('data-theme',r.getAttribute('data-theme')==='dark'?'light':'dark');});
+els.userForm.addEventListener('submit',async e=>{e.preventDefault(); await api('/admin/users',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:document.getElementById('newUsername').value,password:document.getElementById('newPassword').value,email:document.getElementById('newEmail').value||null,role:document.getElementById('newRole').value})}); await loadUsers(); els.userForm.reset();});
+els.digestForm.addEventListener('submit',async e=>{e.preventDefault(); await api('/admin/digest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({smtp_host:document.getElementById('smtpHost').value,smtp_port:Number(document.getElementById('smtpPort').value||587),smtp_username:document.getElementById('smtpUser').value,smtp_password:document.getElementById('smtpPass').value,sender_email:document.getElementById('senderEmail').value,recipient_email:document.getElementById('recipientEmail').value,enabled:true})}); els.digestStatus.textContent='Digest settings saved';});
+els.sendDigestBtn.addEventListener('click',async()=>{const data=await api('/admin/digest/send',{method:'POST'}); els.digestStatus.textContent=`Digest sent to ${data.to}`;});
+
+els.aliasForm.addEventListener('submit',async e=>{e.preventDefault(); await api('/api/aliases',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({canonical_name:document.getElementById('aliasCanonical').value,aliases:document.getElementById('aliasList').value.split(',').map(x=>x.trim()).filter(Boolean)})}); els.aliasStatus.textContent='Aliases saved'; await load();});
+els.changePasswordForm.addEventListener('submit',async e=>{e.preventDefault(); await api('/me/password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({current_password:document.getElementById('currentPassword').value,new_password:document.getElementById('newPasswordSelf').value})}); els.passwordStatus.textContent='Your password was changed'; els.changePasswordForm.reset();});
+els.resetPasswordForm.addEventListener('submit',async e=>{e.preventDefault(); await api('/admin/password-reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:document.getElementById('resetUsername').value,new_password:document.getElementById('resetNewPassword').value})}); els.passwordStatus.textContent='User password reset'; els.resetPasswordForm.reset();});
+load(); setInterval(load,15*60*1000);
+</script>
+</body>
+</html>
